@@ -1,0 +1,227 @@
+{
+  "source": "https://locallyeg.com/fast-checkout",
+  "endpoint": "https://backend.locallyeg.com/api/state/shipping",
+  "verifiedAt": "2026-09-23",
+  "currency": "EGP",
+  "markup": 10,
+  "rounding": "Locally displays whole EGP; prices use its displayed amount plus 10 EGP.",
+  "rates": [
+    {
+      "id": "6th-of-october",
+      "name": "6th of October",
+      "locallyRaw": 60.42,
+      "locallyPrice": 60,
+      "price": 70
+    },
+    {
+      "id": "alexandria",
+      "name": "Alexandria",
+      "locallyRaw": 77.52,
+      "locallyPrice": 78,
+      "price": 88
+    },
+    {
+      "id": "aswan",
+      "name": "Aswan",
+      "locallyRaw": 100.32000000000001,
+      "locallyPrice": 100,
+      "price": 110
+    },
+    {
+      "id": "asyut",
+      "name": "Asyut",
+      "locallyRaw": 100.32000000000001,
+      "locallyPrice": 100,
+      "price": 110
+    },
+    {
+      "id": "beheira",
+      "name": "Beheira",
+      "locallyRaw": 88.92,
+      "locallyPrice": 89,
+      "price": 99
+    },
+    {
+      "id": "beni-suef",
+      "name": "Beni Suef",
+      "locallyRaw": 100.32000000000001,
+      "locallyPrice": 100,
+      "price": 110
+    },
+    {
+      "id": "cairo",
+      "name": "Cairo",
+      "locallyRaw": 60.42,
+      "locallyPrice": 60,
+      "price": 70
+    },
+    {
+      "id": "dakahlia",
+      "name": "Dakahlia",
+      "locallyRaw": 88.92,
+      "locallyPrice": 89,
+      "price": 99
+    },
+    {
+      "id": "damietta",
+      "name": "Damietta",
+      "locallyRaw": 88.92,
+      "locallyPrice": 89,
+      "price": 99
+    },
+    {
+      "id": "fayed",
+      "name": "Fayed",
+      "locallyRaw": 88.92,
+      "locallyPrice": 89,
+      "price": 99
+    },
+    {
+      "id": "fayoum",
+      "name": "Fayoum",
+      "locallyRaw": 100.32000000000001,
+      "locallyPrice": 100,
+      "price": 110
+    },
+    {
+      "id": "gharbeya",
+      "name": "Gharbeya",
+      "locallyRaw": 88.92,
+      "locallyPrice": 89,
+      "price": 99
+    },
+    {
+      "id": "giza",
+      "name": "Giza",
+      "locallyRaw": 60.42,
+      "locallyPrice": 60,
+      "price": 70
+    },
+    {
+      "id": "helwan",
+      "name": "Helwan",
+      "locallyRaw": 60.42,
+      "locallyPrice": 60,
+      "price": 70
+    },
+    {
+      "id": "ismailia",
+      "name": "Ismailia",
+      "locallyRaw": 88.92,
+      "locallyPrice": 89,
+      "price": 99
+    },
+    {
+      "id": "kafr-el-sheikh",
+      "name": "Kafr El Sheikh",
+      "locallyRaw": 88.92,
+      "locallyPrice": 89,
+      "price": 99
+    },
+    {
+      "id": "luxor",
+      "name": "Luxor",
+      "locallyRaw": 100.32000000000001,
+      "locallyPrice": 100,
+      "price": 110
+    },
+    {
+      "id": "matrouh",
+      "name": "Matrouh",
+      "locallyRaw": 123.12,
+      "locallyPrice": 123,
+      "price": 133
+    },
+    {
+      "id": "menoufia",
+      "name": "Menoufia",
+      "locallyRaw": 88.92,
+      "locallyPrice": 89,
+      "price": 99
+    },
+    {
+      "id": "minya",
+      "name": "Minya",
+      "locallyRaw": 100.32000000000001,
+      "locallyPrice": 100,
+      "price": 110
+    },
+    {
+      "id": "new-valley",
+      "name": "New Valley",
+      "locallyRaw": 123.12,
+      "locallyPrice": 123,
+      "price": 133
+    },
+    {
+      "id": "north-coast",
+      "name": "North Coast",
+      "locallyRaw": 123.12,
+      "locallyPrice": 123,
+      "price": 133
+    },
+    {
+      "id": "north-sinai",
+      "name": "North Sinai",
+      "locallyRaw": 123.12,
+      "locallyPrice": 123,
+      "price": 133
+    },
+    {
+      "id": "port-said",
+      "name": "Port Said",
+      "locallyRaw": 88.92,
+      "locallyPrice": 89,
+      "price": 99
+    },
+    {
+      "id": "qalyubia",
+      "name": "Qalyubia",
+      "locallyRaw": 88.92,
+      "locallyPrice": 89,
+      "price": 99
+    },
+    {
+      "id": "qena",
+      "name": "Qena",
+      "locallyRaw": 100.32000000000001,
+      "locallyPrice": 100,
+      "price": 110
+    },
+    {
+      "id": "red-sea",
+      "name": "Red Sea",
+      "locallyRaw": 123.12,
+      "locallyPrice": 123,
+      "price": 133
+    },
+    {
+      "id": "sharkeya",
+      "name": "Sharkeya",
+      "locallyRaw": 88.92,
+      "locallyPrice": 89,
+      "price": 99
+    },
+    {
+      "id": "sohag",
+      "name": "Sohag",
+      "locallyRaw": 100.32000000000001,
+      "locallyPrice": 100,
+      "price": 110
+    },
+    {
+      "id": "south-sinai",
+      "name": "South Sinai",
+      "locallyRaw": 123.12,
+      "locallyPrice": 123,
+      "price": 133
+    },
+    {
+      "id": "suez",
+      "name": "Suez",
+      "locallyRaw": 88.92,
+      "locallyPrice": 89,
+      "price": 99
+    }
+  ]
+}

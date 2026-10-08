@@ -1,0 +1,12 @@
+node_modules/
+.npm-cache/
+.vercel/
+
+.env*
+!.env.example
+
+*.sqlite
+*.sqlite-*
+*.db
+*.db-*
+*.log

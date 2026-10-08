@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+    <url>
+        <loc>https://bondok-store.vercel.app/</loc>
+    </url>
+
+    <url>
+        <loc>https://bondok-store.vercel.app/shop.html</loc>
+    </url>
+
+    <url>
+        <loc>https://bondok-store.vercel.app/about.html</loc>
+    </url>
+
+    <url>
+        <loc>https://bondok-store.vercel.app/brands.html</loc>
+    </url>
+
+    <url>
+        <loc>https://bondok-store.vercel.app/offers.html</loc>
+    </url>
+
+    <url>
+        <loc>https://bondok-store.vercel.app/FAQ.html</loc>
+    </url>
+
+    <url>
+        <loc>https://bondok-store.vercel.app/orders-shipping.html</loc>
+    </url>
+
+    <url>
+        <loc>https://bondok-store.vercel.app/returns-refunds.html</loc>
+    </url>
+
+    <url>
+        <loc>https://bondok-store.vercel.app/policies.html</loc>
+    </url>
+
+</urlset>

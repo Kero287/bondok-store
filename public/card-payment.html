@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="referrer" content="no-referrer">
+    <title>Secure card payment | Bondok Store</title>
+    <script src="preferences.js"></script>
+    <link rel="stylesheet" href="style.css?v=card-payment-1">
+    <script src="card-payment.js" defer></script>
+</head>
+<body class="card-payment-page">
+    <main class="card-payment-layout">
+        <aside class="card-payment-summary">
+            <a href="index.html" class="card-payment-brand" aria-label="Bondok Store home"><img src="images/logo.png" alt="Bondok Store"></a>
+            <div class="card-payment-amount"><p data-copy="total">Total Amount</p><h1 id="card-total">—</h1><p id="card-order"></p><span data-copy="shipping">Shipping included</span></div>
+            <div class="card-payment-trust"><span>Powered by <strong>Paymob</strong></span><span data-copy="secure">Secure payment</span></div>
+        </aside>
+        <section class="card-payment-form" aria-labelledby="card-heading">
+            <header><a id="card-back" href="checkout.html" data-copy="back">Back to checkout</a><h2 id="card-heading" data-copy="checkout">Checkout</h2></header>
+            <p data-copy="method">Payment method</p>
+            <div class="card-payment-method"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="M2 9h20M6 15h4"/></svg><strong>Visa / Mastercard</strong></div>
+            <p id="card-loading" role="status" data-copy="loading">Loading secure card fields…</p>
+            <div id="paymob-card-fields"></div>
+            <div id="card-error" role="alert" hidden></div>
+            <button id="card-retry" class="secondary-button" type="button" hidden data-copy="retry">Try again</button>
+            <p class="card-payment-footnote" data-copy="privacy">Your card details are securely processed by Paymob.</p>
+        </section>
+    </main>
+</body>
+</html>

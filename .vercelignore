@@ -1,0 +1,10 @@
+node_modules
+.npm-cache
+.git
+.env*
+*.sqlite
+*.sqlite-*
+*.db
+*.db-*
+tests
+*.log

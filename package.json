@@ -1,0 +1,24 @@
+{
+  "name": "bondok-store",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Bondok Store with SQLite authentication and product management",
+  "scripts": {
+    "start": "node --env-file-if-exists=.env.local server.js",
+    "build": "node scripts/build.js",
+    "test": "node tests/best-sellers.cjs && node tests/cart-feedback.cjs && node tests/deployment.cjs && node tests/paymob.cjs && node tests/recovery.cjs",
+    "test:responsive": "node tests/preferences-browser.cjs",
+    "db:setup": "node --env-file-if-exists=.env.local scripts/setup-db.js",
+    "db:import": "node --env-file-if-exists=.env.local scripts/import-db.js"
+  },
+  "engines": {
+    "node": "24.x"
+  },
+  "dependencies": {
+    "@libsql/client": "^0.18.0",
+    "nodemailer": "^10.0.10"
+  },
+  "devDependencies": {
+    "playwright": "^1.63.0"
+  }
+}
