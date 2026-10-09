@@ -1596,6 +1596,11 @@ a.gallery-open { cursor: pointer; text-decoration: none; }
         width: 35px;
     }
 
+    html[dir="rtl"] .nav-links.is-mobile-open a::after {
+        right: 0;
+        left: auto;
+    }
+
     .offer-banner {
         align-items: flex-start;
         flex-direction: column;
