@@ -138,18 +138,8 @@ function renderProducts() {
         visibleProducts = visibleProducts.filter((product) => product.bestSeller === true);
     }
     if (!showAllProducts) visibleProducts = visibleProducts.slice(0, 8);
-    productGrid.innerHTML = visibleProducts.map((product) => `
-        <article class="product-card">
-            ${renderProductGallery(product)}
-            <div class="product-info">
-                <p class="product-brand">${product.brand || "Other"}</p><div class="product-title"><h3><a href="product.html?id=${product.id}">${product.name}</a></h3><button class="wish-button ${wishlist.includes(product.id) ? "is-saved" : ""}" type="button" data-wishlist-product="${product.id}" aria-label="Save ${product.name}" aria-pressed="${wishlist.includes(product.id)}"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.2 8.8c0 5-8.2 10-8.2 10s-8.2-5-8.2-10A4.2 4.2 0 0 1 12 6a4.2 4.2 0 0 1 8.2 2.8Z"/></svg></button></div>
-                <div class="product-meta">
-                    <span class="product-price">${formatPrice(product.price)}</span>
-                    ${product.stock < 1 ? '<span class="stock-label">Out of stock</span>' : ""}
-                </div>
-            </div>
-        </article>
-    `).join("");
+    productGrid.innerHTML = visibleProducts.map(renderProductCard).join("");
+    renderOtherProducts();
     const heading = document.querySelector("#shop h2");
     if (heading) {
         if (!heading.dataset.defaultTitle) heading.dataset.defaultTitle = heading.textContent;
@@ -163,6 +153,29 @@ function renderProducts() {
         productGrid.append(message);
     }
     document.querySelector("[data-clear-category]").hidden = showAllProducts || !visibleProducts.length;
+}
+
+function renderOtherProducts() {
+    const section = document.querySelector("#other-products");
+    if (!section) return;
+    const otherProducts = products.filter(product => (product.brand || "Other").trim().toLowerCase() === "other");
+    section.hidden = activeCategory !== "all" || !!activeBrand || !!searchQuery || !otherProducts.length;
+    section.querySelector(".product-grid").innerHTML = section.hidden ? "" : otherProducts.map(renderProductCard).join("");
+}
+
+function renderProductCard(product) {
+    return `
+        <article class="product-card">
+            ${renderProductGallery(product)}
+            <div class="product-info">
+                <p class="product-brand">${product.brand || "Other"}</p><div class="product-title"><h3><a href="product.html?id=${product.id}">${product.name}</a></h3><button class="wish-button ${wishlist.includes(product.id) ? "is-saved" : ""}" type="button" data-wishlist-product="${product.id}" aria-label="Save ${product.name}" aria-pressed="${wishlist.includes(product.id)}"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.2 8.8c0 5-8.2 10-8.2 10s-8.2-5-8.2-10A4.2 4.2 0 0 1 12 6a4.2 4.2 0 0 1 8.2 2.8Z"/></svg></button></div>
+                <div class="product-meta">
+                    <span class="product-price">${formatPrice(product.price)}</span>
+                    ${product.stock < 1 ? '<span class="stock-label">Out of stock</span>' : ""}
+                </div>
+            </div>
+        </article>
+    `;
 }
 
 function renderProductGallery(product) {

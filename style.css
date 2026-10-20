@@ -456,7 +456,7 @@ a.gallery-open { cursor: pointer; text-decoration: none; }
     aspect-ratio: 4 / 5;
     width: 100%;
     display: block;
-    object-fit: contain;
+    object-fit: cover;
     background: #eeeae3;
 }
 
@@ -1686,12 +1686,14 @@ a.gallery-open { cursor: pointer; text-decoration: none; }
 .clear-filter {
     margin: 28px auto 0;
     display: block;
+    width: fit-content;
     padding: 10px 16px;
     border: 1px solid var(--ink);
     color: var(--ink);
     background: transparent;
     font: inherit;
     font-size: 11px;
+    text-decoration: none;
     cursor: pointer;
 }
 

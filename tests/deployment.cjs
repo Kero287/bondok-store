@@ -60,6 +60,14 @@ async function checkApi(asynchronous) {
     assert.deepEqual(imageResponse.data, Buffer.from(photo.split(",")[1], "base64"));
     assert.equal((await request("GET", "/api/media/" + "0".repeat(32))).status, 404);
     const galleryBody = { name: "Gallery", price: 150, stock: 2, category: "T-Shirts", brand: "ZARA", images: [uploaded.data.url, uploaded2.data.url] };
+    const otherBody = { ...galleryBody, name: "Other hoodie", category: "Hoodie", brand: "Other" };
+    const otherProduct = await request("POST", "/api/products", otherBody, admin);
+    assert.equal(otherProduct.status, 201);
+    assert.equal(otherProduct.data.brand, "Other");
+    assert.equal(otherProduct.data.bestSeller, false);
+    assert.equal((await request("GET", "/api/products")).data.find(p => p.id === otherProduct.data.id).brand, "Other");
+    const editedOther = await request("PUT", `/api/products/${otherProduct.data.id}`, { ...otherBody, name: "Updated Other hoodie" }, admin);
+    assert.equal(editedOther.data.brand, "Other");
     const galleryProduct = await request("POST", "/api/products", galleryBody, admin);
     assert.equal(galleryProduct.status, 201);
     assert.equal(galleryProduct.data.bestSeller, false);
