@@ -8,6 +8,7 @@
     "build": "node scripts/build.js",
     "test": "node tests/best-sellers.cjs && node tests/cart-feedback.cjs && node tests/deployment.cjs && node tests/paymob.cjs && node tests/recovery.cjs",
     "test:responsive": "node tests/preferences-browser.cjs",
+    "test:admin": "node tests/admin-products-browser.cjs",
     "db:setup": "node --env-file-if-exists=.env.local scripts/setup-db.js",
     "db:import": "node --env-file-if-exists=.env.local scripts/import-db.js"
   },

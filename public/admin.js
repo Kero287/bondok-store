@@ -3,6 +3,7 @@ let adminProducts = [];
 let receiptUrls = [];
 let productPhotos = [""];
 let photoBusy = false;
+let newBestSeller = false;
 
 function renderPhotoUploads() {
     const container = document.querySelector("#product-uploads");
@@ -67,6 +68,7 @@ document.querySelector("#product-uploads")?.addEventListener("change", async eve
         input.value = ""; return;
     }
     photoBusy = true;
+    document.querySelector("#product-form").elements.brand.disabled = true;
     document.querySelector(".product-upload-field").disabled = true;
     document.querySelector("#product-submit").disabled = true;
     try {
@@ -83,6 +85,7 @@ document.querySelector("#product-uploads")?.addEventListener("change", async eve
         status.textContent = `Upload failed: ${error.message} Your previous photos have been kept.`;
     } finally {
         photoBusy = false;
+        document.querySelector("#product-form").elements.brand.disabled = false;
         document.querySelector(".product-upload-field").disabled = false;
         document.querySelector("#product-submit").disabled = false;
         renderPhotoUploads();
@@ -105,14 +108,52 @@ const price = (value) => `${Number(value).toLocaleString("en-EG")} EGP`;
 function renderProducts() {
     const form = document.querySelector("#product-form");
     if (!form) return;
-    document.querySelector("#admin-best-sellers").innerHTML = adminProducts.filter(product => product.bestSeller).map(product => `<div class="admin-product"><span>${escapeAdmin(product.name)} / ${escapeAdmin(product.category)}</span><button type="button" data-edit-product="${product.id}">Edit Best Seller</button></div>`).join("") || "<p>No Best Sellers selected. This section stays empty on the storefront until you add products.</p>";
-    const category = form.elements.category.value;
-    const categoryProducts = adminProducts.filter((product) => product.category === category);
-    document.querySelector("#admin-products").innerHTML = categoryProducts.map((product) => `<div class="admin-product"><span>${product.name} · ${product.brand || "Other"} · ${price(product.price)} · ${product.stock} in stock</span><span><button type="button" data-edit-product="${product.id}">Edit</button><button type="button" data-delete-product="${product.id}">Delete</button></span></div>`).join("") || `<p>No ${category} products yet. Add the first one above.</p>`;
+    const brand = form.elements.brand.value;
+    const details = document.querySelector("#product-details");
+    details.hidden = !brand;
+    details.disabled = !brand;
+    const products = adminProducts.filter(product => (product.brand || "Other") === brand);
+    const bestSellerBrand = document.querySelector("#best-seller-brand").value;
+    const bestSellers = adminProducts.filter(product => product.bestSeller && (!bestSellerBrand || (product.brand || "Other") === bestSellerBrand));
+    const formStatus = document.querySelector("#product-form-status");
+    formStatus.hidden = !newBestSeller || !!brand;
+    formStatus.textContent = newBestSeller && !brand ? "Choose a brand above to continue adding your new Best Seller." : "";
+    document.querySelector("#admin-products-title").textContent = brand ? `${brand} · Products (${products.length})` : "Brand products";
+    document.querySelector("#admin-best-sellers-title").textContent = bestSellerBrand ? `${bestSellerBrand} · Best Sellers (${bestSellers.length})` : `Best Sellers (${bestSellers.length})`;
+    const row = (product, featured = false) => `<div class="admin-product"><span>${escapeAdmin(product.name)} · ${escapeAdmin(product.brand || "Other")} · ${escapeAdmin(product.category)} · ${price(product.price)} · ${Number(product.stock)} in stock</span><span class="admin-row-actions"><button type="button" data-edit-product="${product.id}">Edit</button>${featured ? `<button type="button" data-remove-best-seller="${product.id}">Remove from Best Sellers</button>` : !product.bestSeller ? `<button type="button" data-add-best-seller="${product.id}">Add to Best Sellers</button>` : ""}<button type="button" data-delete-product="${product.id}">Delete product</button></span></div>`;
+    document.querySelector("#admin-products").innerHTML = !brand ? "<p>Select a brand to view its products.</p>" : products.map(product => row(product)).join("") || "<p>No products for this brand yet. Add the first one above.</p>";
+    document.querySelector("#admin-best-sellers").innerHTML = bestSellers.map(product => row(product, true)).join("") || (bestSellerBrand ? "<p>No Best Sellers for this brand yet.</p>" : "<p>No Best Sellers selected yet.</p>");
+}
+
+function resetProductForm(brand, category, bestSeller = false) {
+    const form = document.querySelector("#product-form");
+    newBestSeller = bestSeller;
+    form.reset();
+    form.elements.id.value = "";
+    form.elements.brand.value = brand;
+    if (category) form.elements.category.value = category;
+    form.elements.bestSeller.checked = bestSeller;
+    productPhotos = [""];
+    renderPhotoUploads();
+    document.querySelector("#upload-status").textContent = "";
+    document.querySelector("#product-submit").textContent = bestSeller ? "Add new Best Seller" : "Add product";
+    document.querySelector("#product-form-title").textContent = bestSeller ? "Add new Best Seller" : "Add product";
+    const cancel = document.querySelector("[data-cancel-product]");
+    cancel.hidden = !bestSeller;
+    cancel.textContent = bestSeller ? "Cancel" : "Cancel edit";
 }
 
 async function loadProducts() {
     adminProducts = await adminApi("/api/products");
+    const brands = document.querySelector("#product-form").elements.brand;
+    for (const product of adminProducts) {
+        const brand = product.brand || "Other";
+        if (![...brands.options].some(option => option.value === brand)) brands.add(new Option(brand, brand));
+    }
+    const bestSellerBrands = document.querySelector("#best-seller-brand");
+    for (const option of brands.options) {
+        if (option.value && ![...bestSellerBrands.options].some(item => item.value === option.value)) bestSellerBrands.add(new Option(option.textContent, option.value));
+    }
     renderProducts();
 }
 
@@ -186,13 +227,16 @@ document.addEventListener("click", async (event) => {
     if (edit) {
         if (photoBusy) return;
         const product = adminProducts.find((item) => item.id === Number(edit.dataset.editProduct));
+        if (!product) return;
         const form = document.querySelector("#product-form");
+        newBestSeller = false;
         Object.entries(product).forEach(([key, value]) => {
             const field = form.elements[key];
             if (!field) return;
             if (field.tagName === "SELECT" && value && ![...field.options].some(option => option.value === value)) field.add(new Option(value, value));
             field.value = value;
         });
+        form.elements.brand.value = product.brand || "Other";
         form.elements.bestSeller.checked = product.bestSeller === true;
         form.elements.sizes.value = product.sizes.join(", ");
         form.elements.colors.value = (product.colors || []).join(", ");
@@ -200,10 +244,55 @@ document.addEventListener("click", async (event) => {
         renderPhotoUploads();
         document.querySelector("#upload-status").textContent = "";
         document.querySelector("#product-submit").textContent = "Save changes";
+        document.querySelector("#product-form-title").textContent = "Edit product";
+        document.querySelector("[data-cancel-product]").hidden = false;
+        document.querySelector("[data-cancel-product]").textContent = "Cancel edit";
+        renderProducts();
         form.scrollIntoView({ behavior: "smooth", block: "start" });
     }
+    if (event.target.closest("[data-cancel-product]")) {
+        if (photoBusy) return;
+        resetProductForm(document.querySelector("#product-form").elements.brand.value);
+        renderProducts();
+        return;
+    }
+    if (event.target.closest("[data-new-best-seller]")) {
+        const form = document.querySelector("#product-form");
+        if (photoBusy) return;
+        resetProductForm(form.elements.brand.value || document.querySelector("#best-seller-brand").value, undefined, true);
+        renderProducts();
+        form.scrollIntoView({ behavior: "smooth", block: "start" });
+        (form.elements.brand.value ? form.elements.name : form.elements.brand).focus({ preventScroll: true });
+        return;
+    }
+    const featureAction = event.target.closest("[data-add-best-seller], [data-remove-best-seller]");
+    if (featureAction) {
+        if (photoBusy) return;
+        const bestSeller = featureAction.hasAttribute("data-add-best-seller");
+        const product = adminProducts.find(item => item.id === Number(featureAction.dataset.addBestSeller || featureAction.dataset.removeBestSeller));
+        if (!product) return;
+        featureAction.disabled = true;
+        try {
+            await adminApi(`/api/products/${product.id}`, { method: "PUT", body: JSON.stringify({ ...product, bestSeller }) });
+            if (bestSeller) document.querySelector("#best-seller-brand").value = "";
+            const form = document.querySelector("#product-form");
+            if (Number(form.elements.id.value) === product.id) form.elements.bestSeller.checked = bestSeller;
+            await loadProducts();
+        } catch (error) { alert(error.message); }
+        finally { featureAction.disabled = false; }
+        return;
+    }
     const remove = event.target.closest("[data-delete-product]");
-    if (remove && confirm("Delete this product?")) adminApi(`/api/products/${remove.dataset.deleteProduct}`, { method: "DELETE" }).then(loadProducts).catch((error) => alert(error.message));
+    if (remove && !photoBusy && confirm("Delete this product from the store and Best Sellers?")) {
+        remove.disabled = true;
+        try {
+            await adminApi(`/api/products/${remove.dataset.deleteProduct}`, { method: "DELETE" });
+            const form = document.querySelector("#product-form");
+            if (form.elements.id.value === remove.dataset.deleteProduct) resetProductForm(form.elements.brand.value);
+            await loadProducts();
+        } catch (error) { alert(error.message); }
+        finally { remove.disabled = false; }
+    }
 });
 
 document.querySelector("#product-form")?.addEventListener("submit", async (event) => {
@@ -211,27 +300,33 @@ document.querySelector("#product-form")?.addEventListener("submit", async (event
     if (photoBusy) return;
     const form = event.currentTarget;
     const data = Object.fromEntries(new FormData(form).entries());
+    if (!data.brand) return;
     const path = data.id ? `/api/products/${data.id}` : "/api/products";
     data.bestSeller = form.elements.bestSeller.checked;
     const selectedCategory = data.category;
+    const selectedBrand = data.brand;
     const images = productPhotos.filter(Boolean);
     const status = document.querySelector("#upload-status");
     if (!images.length || !productPhotos[0]) { status.textContent = "Please upload the main photo (Upload 1)."; return; }
     photoBusy = true;
-    const fields = [...form.querySelectorAll("input, select, button")];
+    const fields = [...form.querySelectorAll("input, select, textarea, button")];
     fields.forEach(field => field.disabled = true);
     try {
         await adminApi(path, { method: data.id ? "PUT" : "POST", body: JSON.stringify({ ...data, colors: data.colors.split(",").map(color => color.trim()).filter(Boolean), sizes: data.sizes.split(",").map(size => size.trim()).filter(Boolean), images, image: images[0], price: Number(data.price), stock: Number(data.stock) }) });
-        form.reset(); form.elements.category.value = selectedCategory;
-        productPhotos = [""]; renderPhotoUploads();
-        document.querySelector("#product-submit").textContent = "Add product";
+        resetProductForm(selectedBrand, selectedCategory);
+        if (data.bestSeller) document.querySelector("#best-seller-brand").value = "";
         status.textContent = "Product saved.";
         await loadProducts();
     } catch (error) { status.textContent = error.message; }
     finally { photoBusy = false; fields.forEach(field => field.disabled = false); }
 });
 
-document.querySelector("#product-form")?.elements.category.addEventListener("change", renderProducts);
+document.querySelector("#product-form")?.elements.brand.addEventListener("change", event => {
+    resetProductForm(event.target.value, undefined, newBestSeller);
+    renderProducts();
+});
+
+document.querySelector("#best-seller-brand")?.addEventListener("change", renderProducts);
 
 (async () => {
     try {

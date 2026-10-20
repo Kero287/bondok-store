@@ -1,5 +1,25 @@
 (() => {
     const entries = {
+        'Select a brand': 'اختار البراند',
+        'Choose a brand to add products and manage its products and Best Sellers below.': 'اختار البراند الأول لإضافة منتجات وعرض منتجاته والأكثر مبيعًا تحت.',
+        'Brand products': 'منتجات البراند',
+        'Select a brand to view its products.': 'اختار البراند لعرض منتجاته.',
+        'Select a brand to view its Best Sellers.': 'اختار البراند لعرض الأكثر مبيعًا فيه.',
+        'No products for this brand yet. Add the first one above.': 'مفيش منتجات للبراند ده لسه. ضيف أول منتج من فوق.',
+        'No Best Sellers for this brand yet.': 'مفيش منتجات مختارة في الأكثر مبيعًا للبراند ده لسه.',
+        'Edit product': 'تعديل المنتج',
+        'Cancel edit': 'إلغاء التعديل',
+        'Cancel': 'إلغاء',
+        'Delete product': 'حذف المنتج',
+        'Remove from Best Sellers': 'إزالة من الأكثر مبيعًا',
+        'Add to Best Sellers': 'إضافة للأكثر مبيعًا',
+        'Add new Best Seller': 'إضافة منتج جديد للأكثر مبيعًا',
+        'Best Sellers brand': 'فلتر براند الأكثر مبيعًا',
+        'All brands': 'كل البراندات',
+        'Loading Best Sellers...': 'جاري تحميل الأكثر مبيعًا...',
+        'No Best Sellers selected yet.': 'مفيش منتجات مختارة في الأكثر مبيعًا لسه.',
+        'Choose a brand above to continue adding your new Best Seller.': 'اختار البراند من فوق عشان تكمل إضافة المنتج الجديد للأكثر مبيعًا.',
+        'Add an existing product using Add to Best Sellers, or create a new Best Seller here. Removing it from Best Sellers keeps it in the store.': 'ضيف منتج موجود بزر إضافة للأكثر مبيعًا، أو ضيف منتج جديد من هنا. إزالته من الأكثر مبيعًا بتسيبه موجود في المتجر.',
         'Preview card payment': 'معاينة الدفع بالبطاقة',
         'Preview the card payment page while activation is pending. No payment or order will be submitted.': 'يمكنك معاينة صفحة البطاقة لحين التفعيل. لن يتم إرسال طلب أو إجراء دفع.',
         'After Place Order, enter your card details on the secure payment page. No account needed.': 'بعد تأكيد الطلب، أدخل بيانات بطاقتك في صفحة الدفع الآمن. لا تحتاج إلى حساب.',
@@ -54,6 +74,9 @@
         if (document.documentElement.lang !== 'ar') return text;
         const key = normalize(text);
         if (entries[key]) return text.replace(text.trim(), entries[key]);
+        if (/^Best Sellers \(\d+\)$/.test(key)) return key.replace('Best Sellers', entries['Best Sellers'] || 'الأكثر مبيعًا');
+        const brandHeading = key.match(/^(.*) · (Products|Best Sellers) \((\d+)\)$/);
+        if (brandHeading) return `${brandHeading[1]} · ${entries[brandHeading[2]] || brandHeading[2]} (${brandHeading[3]})`;
         if (key.endsWith(' | Bondok Store')) return (entries[key.split(' | ')[0]] || key.split(' | ')[0]) + ' | بندق ستور';
         if (/^[+\d,.]+ EGP$/.test(key)) return key.replace('EGP', 'ج.م');
         if (/^Qty: /.test(key)) return key.replace('Qty:', 'الكمية:');

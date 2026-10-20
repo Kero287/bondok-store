@@ -43,6 +43,7 @@ const assert = require('node:assert/strict');
         await page.route('**/api/auth/me', route => route.fulfill({ json: { user: { name: 'Test admin', role: 'admin' } } }));
         await page.goto('http://localhost:3101/admin-products.html');
         await page.getByText('Welcome, Test admin').waitFor();
+        await page.selectOption('[name=brand]', 'Other');
         await page.selectOption('[name=category]', 'Hoodie');
         await page.locator('[data-edit-product="11"]').click();
         await page.check('[name=bestSeller]');
